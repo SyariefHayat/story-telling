@@ -47,14 +47,27 @@
   --leaf-dark: #00b815;
 }
 
+html,
+body {
+  width: 100%;
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
 body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  min-height: 100vh;
   background-color: var(--dark-color);
-  overflow: hidden;
   perspective: 1000px;
+  touch-action: none;
 }
 
 .night {
@@ -2080,25 +2093,26 @@ body {
   animation-play-state: paused !important;
 }
 
-/* On phones, keep the three main flowers within the lower half of the screen. */
+/* On phones, keep the three main flowers within the lower half of the screen and prevent overflow */
 @media (max-width: 700px) {
   .flowers {
-    transform: scale(1);
+    transform: scale(0.75);
+    transform-origin: bottom center;
   }
 
   .flower {
-    bottom: 3vh;
+    bottom: 2vh;
   }
 
   .flower--1 .flower__line {
-    height: 42vh;
+    height: 40vh;
   }
 
   .flower--2 .flower__line {
-    height: 36vh;
+    height: 34vh;
   }
 
   .flower--3 .flower__line {
-    height: 33vh;
+    height: 30vh;
   }
 }
