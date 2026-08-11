@@ -279,12 +279,13 @@ window.addEventListener("load", () => {
             fragment.y += fragment.vy * delta;
             fragment.element.style.transform = `translate3d(${fragment.x}px, ${fragment.y}px, 0)`;
             if (fragment.y >= window.innerHeight - 14) {
-                // Splash fragments just fade on landing — routing them through
-                // the full groundImpact (growFlower/seedLargeFlower/etc.) chain
-                // meant every single collision cascaded into several extra
-                // flower-growth passes a moment later, which is what made
-                // impacts feel heavy. Real raindrops still seed the ground.
+                // Splash fragments still grow a flower (rain hitting an
+                // object should count same as rain hitting the ground) but
+                // skip the heavier ripple/seedLargeFlower/waterNearby part
+                // of groundImpact — that cascade per fragment was what made
+                // hitting objects feel laggy, growFlower alone is cheap.
                 splash(fragment.x, window.innerHeight - 8);
+                growFlower(fragment.x);
                 fragment.element.remove();
                 fragments.splice(index, 1);
             }
