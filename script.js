@@ -370,13 +370,18 @@
       return;
 
     emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        from_name: "Story Telling Visitor",
-        to_name: "Admin",
-        message: `Buku dibuka di ${window.location.href}`,
-        time: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
-        page: window.location.href,
-      })
+      .send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: "Story Telling Visitor",
+          to_name: "Admin",
+          message: `Buku dibuka di ${window.location.href}`,
+          time: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+          page: window.location.href,
+        },
+        EMAILJS_PUBLIC_KEY
+      )
       .then((res) => console.log("EmailJS Success:", res.status, res.text))
       .catch((err) => {
         console.error("EmailJS Error details:", err);
