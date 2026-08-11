@@ -2,6 +2,10 @@ window.addEventListener("load", () => {
     document.body.classList.remove("container");
 });
 
+document.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+}, { passive: false });
+
 window.addEventListener("load", () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
