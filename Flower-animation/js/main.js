@@ -106,9 +106,13 @@ window.addEventListener("load", () => {
         seedAtGround(x);
     }
 
+    const activeBlooms = [];
+
     function witherBloom(element) {
         if (element.classList.contains("is-withering")) return;
         element.classList.add("is-withering");
+        const index = activeBlooms.indexOf(element);
+        if (index !== -1) activeBlooms.splice(index, 1);
         window.setTimeout(() => element.remove(), 900);
     }
 
@@ -132,8 +136,8 @@ window.addEventListener("load", () => {
         element.style.setProperty("--bloom-center", center);
         element.innerHTML = '<i class="rain-bloom__stem"></i><i class="rain-bloom__head"></i>';
         garden.append(element);
-        const blooms = garden.querySelectorAll(".rain-bloom:not(.is-withering)");
-        if (blooms.length > 240) witherBloom(blooms[0]);
+        activeBlooms.push(element);
+        if (activeBlooms.length > 240) witherBloom(activeBlooms[0]);
         window.setTimeout(() => witherBloom(element), 600000);
     }
 
@@ -231,9 +235,15 @@ window.addEventListener("load", () => {
     }
 
     function targetAt(x, y) {
-        const inside = ({ rect }) => x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-        return targets.find(({ element, rect }) => element.classList.contains("rain-big-bloom__head") && inside({ rect }))
-            || targets.find(inside);
+        let fallback = null;
+        for (let index = 0; index < targets.length; index += 1) {
+            const target = targets[index];
+            const { rect } = target;
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) continue;
+            if (target.element.classList.contains("rain-big-bloom__head")) return target;
+            if (!fallback) fallback = target;
+        }
+        return fallback;
     }
 
     function frame(now) {
@@ -269,7 +279,12 @@ window.addEventListener("load", () => {
             fragment.y += fragment.vy * delta;
             fragment.element.style.transform = `translate3d(${fragment.x}px, ${fragment.y}px, 0)`;
             if (fragment.y >= window.innerHeight - 14) {
-                groundImpact(fragment.x);
+                // Splash fragments just fade on landing — routing them through
+                // the full groundImpact (growFlower/seedLargeFlower/etc.) chain
+                // meant every single collision cascaded into several extra
+                // flower-growth passes a moment later, which is what made
+                // impacts feel heavy. Real raindrops still seed the ground.
+                splash(fragment.x, window.innerHeight - 8);
                 fragment.element.remove();
                 fragments.splice(index, 1);
             }
