@@ -196,12 +196,16 @@ window.addEventListener("load", () => {
     }
 
     function waterNearbyLargeFlowers(x) {
+        // Now that far more raindrops reach the ground per second, this runs
+        // much more often than before — reuse the already-tracked largeBlooms
+        // list instead of re-querying the DOM for ".rain-big-bloom" every hit.
+        if (largeBlooms.length === 0) return;
         const vmin = Math.min(window.innerWidth, window.innerHeight) / 100;
         const reach = 10 * vmin;
-        garden.querySelectorAll(".rain-big-bloom").forEach((bloom) => {
-            const rect = bloom.getBoundingClientRect();
+        largeBlooms.forEach((entry) => {
+            const rect = entry.element.getBoundingClientRect();
             if (x >= rect.left - reach && x <= rect.right + reach) {
-                waterLargeFlower(bloom);
+                waterLargeFlower(entry.element);
             }
         });
     }
