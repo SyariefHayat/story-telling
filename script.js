@@ -371,11 +371,17 @@
 
     emailjs
       .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name: "Story Telling Visitor",
+        to_name: "Admin",
+        message: `Buku dibuka di ${window.location.href}`,
         time: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
         page: window.location.href,
       })
       .then((res) => console.log("EmailJS Success:", res.status, res.text))
-      .catch((err) => console.error("EmailJS Error details:", err));
+      .catch((err) => {
+        console.error("EmailJS Error details:", err);
+        if (err && err.text) console.error("Server response text:", err.text);
+      });
   }
 
   let bookRevealed = false;
