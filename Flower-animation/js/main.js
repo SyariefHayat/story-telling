@@ -34,6 +34,13 @@ window.addEventListener("load", () => {
     let lastSpawn = 0;
     let lastFrame = performance.now();
     const rainStartDelay = 7000;
+    // Mobile CPUs/GPUs choke on the same drop count and collision-check
+    // frequency that desktop handles fine, so this trims both for phones.
+    const isMobile = window.innerWidth <= 700;
+    const maxRaindrops = isMobile ? 10 : 22;
+    const rainSpawnInterval = isMobile ? 260 : 170;
+    const targetRefreshInterval = isMobile ? 320 : 140;
+    const fragmentsPerSplit = isMobile ? 2 : 3;
     const largeFlowerSlots = new Set();
     // Three "core" spots fill in reliably at the usual odds; a handful of
     // extra spots further out only sprout very rarely, so seeing a big
@@ -56,7 +63,7 @@ window.addEventListener("load", () => {
     const GROWTH_OPEN_THRESHOLD = 0.95;
 
     function refreshTargets(now) {
-        if (now - lastTargetRead < 140) return;
+        if (now - lastTargetRead < targetRefreshInterval) return;
         lastTargetRead = now;
         targets = [...document.querySelectorAll(collisionSelector)]
             .map((element) => ({ element, rect: element.getBoundingClientRect() }))
@@ -212,7 +219,7 @@ window.addEventListener("load", () => {
 
     function split(drop) {
         splash(drop.x, drop.y);
-        for (let index = 0; index < 3; index += 1) {
+        for (let index = 0; index < fragmentsPerSplit; index += 1) {
             fragments.push(createFragment(
                 drop.x,
                 drop.y,
@@ -234,7 +241,7 @@ window.addEventListener("load", () => {
         lastFrame = now;
         refreshTargets(now);
 
-        if (now - lastSpawn > 170 && rain.length < 22) {
+        if (now - lastSpawn > rainSpawnInterval && rain.length < maxRaindrops) {
             makeDrop();
             lastSpawn = now;
         }
