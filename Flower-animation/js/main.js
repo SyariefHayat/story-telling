@@ -45,6 +45,10 @@ window.addEventListener("load", () => {
     const rainSpawnInterval = isMobile ? 260 : 170;
     const targetRefreshInterval = isMobile ? 320 : 140;
     const fragmentsPerSplit = isMobile ? 2 : 3;
+    // Every ground/object hit is a candidate to grow a flower, but each
+    // active bloom keeps a glowing box-shadow on screen, which adds up on
+    // mobile GPUs. Only roll it through half the time there.
+    const growthChance = isMobile ? 0.5 : 1;
     const largeFlowerSlots = new Set();
     // Three "core" spots fill in reliably at the usual odds; a handful of
     // extra spots further out only sprout very rarely, so seeing a big
@@ -211,7 +215,7 @@ window.addEventListener("load", () => {
     }
 
     function seedAtGround(x) {
-        growFlower(x);
+        if (Math.random() < growthChance) growFlower(x);
         seedLargeFlower(x);
         waterNearbyLargeFlowers(x);
     }
@@ -293,7 +297,7 @@ window.addEventListener("load", () => {
                 // of groundImpact — that cascade per fragment was what made
                 // hitting objects feel laggy, growFlower alone is cheap.
                 splash(fragment.x, window.innerHeight - 8);
-                growFlower(fragment.x);
+                if (Math.random() < growthChance) growFlower(fragment.x);
                 fragment.element.remove();
                 fragments.splice(index, 1);
             }
