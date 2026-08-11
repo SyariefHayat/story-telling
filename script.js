@@ -1,94 +1,17 @@
+// ===== Load-in blur fade + cursor/gyro parallax + dust particles =====
 (() => {
-  const cover = document.getElementById('bookCover');
-  const sprite = cover ? cover.querySelector('.book-cover__sprite') : null;
-  const book = document.querySelector('.book');
-  const bgPhoto = document.getElementById('bgPhoto');
-
-  if (!cover || !sprite || !book) return;
-
-  const COLS = 4;
-  const ROWS = 3;
-  const FRAMES = COLS * ROWS;
-  const FRAME_MS = 90;
-
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  sprite.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
-
-  const setFrame = (index) => {
-    const col = index % COLS;
-    const row = Math.floor(index / COLS);
-    sprite.style.backgroundPosition = `${(col * 100) / (COLS - 1)}% ${(row * 100) / (ROWS - 1)}%`;
-  };
-
-  const img = new Image();
-  img.onload = () => {
-    sprite.style.aspectRatio = String((img.naturalWidth / COLS) / (img.naturalHeight / ROWS));
-  };
-  img.src = './public/open-book.png';
-
-  setFrame(0);
-
-  let opened = false;
-
-  const bookAnimMs = reduceMotion ? 0 : (FRAMES - 1) * FRAME_MS;
-  const bgZoomMs = reduceMotion || !bgPhoto ? 0 : 650;
-  const bgZoomStart = bookAnimMs + 60;
-  const revealDelay = bgZoomStart + bgZoomMs;
-  const removeDelay = revealDelay + 650;
-
-  const openBook = () => {
-    if (opened) return;
-    opened = true;
-
-    cover.classList.add('is-opening');
-
-    if (reduceMotion) {
-      setFrame(FRAMES - 1);
-    } else {
-      let i = 0;
-      const timer = setInterval(() => {
-        i += 1;
-        setFrame(i);
-        if (i >= FRAMES - 1) clearInterval(timer);
-      }, FRAME_MS);
-    }
-
-    setTimeout(() => {
-      if (bgPhoto) bgPhoto.classList.add('is-zoomed');
-      cover.classList.add('is-settled');
-    }, bgZoomStart);
-
-    setTimeout(() => {
-      book.classList.add('is-visible');
-      cover.classList.add('is-hidden');
-    }, revealDelay);
-
-    setTimeout(() => {
-      cover.remove();
-    }, removeDelay);
-  };
-
-  cover.addEventListener('click', openBook);
-  cover.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openBook();
-    }
-  });
-})();
-
-(() => {
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     requestAnimationFrame(() => {
-      document.body.classList.add('is-loaded');
+      document.body.classList.add("is-loaded");
     });
   });
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
   if (prefersReducedMotion) return;
 
-  const isMobile = window.matchMedia('(width < 748px)').matches;
+  const isMobile = window.matchMedia("(width < 748px)").matches;
 
   // pan range on each axis, in percent, around the 50% center
   const range = 15;
@@ -102,7 +25,7 @@
 
   // ----- pointer/gyro input -----
   if (!isMobile) {
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener("mousemove", (e) => {
       const xRatio = e.clientX / window.innerWidth;
       const yRatio = e.clientY / window.innerHeight;
       targetX = 50 - range + xRatio * range * 2;
@@ -135,32 +58,37 @@
     }
 
     function enableGyro() {
-      window.addEventListener('deviceorientation', handleOrientation);
+      window.addEventListener("deviceorientation", handleOrientation);
     }
 
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
       // iOS requires an explicit user gesture before granting motion sensor access
       const requestGyroPermission = () => {
-        document.removeEventListener('click', requestGyroPermission);
-        document.removeEventListener('touchend', requestGyroPermission);
+        document.removeEventListener("click", requestGyroPermission);
+        document.removeEventListener("touchend", requestGyroPermission);
         DeviceOrientationEvent.requestPermission()
           .then((state) => {
-            if (state === 'granted') enableGyro();
+            if (state === "granted") enableGyro();
           })
           .catch(() => {});
       };
-      document.addEventListener('click', requestGyroPermission, { once: true });
-      document.addEventListener('touchend', requestGyroPermission, { once: true });
+      document.addEventListener("click", requestGyroPermission, { once: true });
+      document.addEventListener("touchend", requestGyroPermission, {
+        once: true,
+      });
     } else {
       enableGyro();
     }
   }
 
-  const bgPhoto = document.getElementById('bgPhoto');
+  const bgPhoto = document.getElementById("bgPhoto");
 
   // ----- floating dust particles -----
-  const canvas = document.getElementById('dust');
-  const ctx = canvas ? canvas.getContext('2d') : null;
+  const canvas = document.getElementById("dust");
+  const ctx = canvas ? canvas.getContext("2d") : null;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const bandRatio = 0.55; // dust stays within the top 55% of the viewport
   const maxParallax = 14; // px of drift applied to particles from pointer/gyro
@@ -208,11 +136,16 @@
       if (p.y < -10) p.y = band + 10;
       if (p.y > band + 10) p.y = -10;
 
-      const wobbleX = Math.sin(time * 0.001 * p.wobbleSpeed + p.wobblePhase) * p.wobbleAmp;
+      const wobbleX =
+        Math.sin(time * 0.001 * p.wobbleSpeed + p.wobblePhase) * p.wobbleAmp;
       const drawX = p.x + wobbleX + pointerXNorm * maxParallax * p.depth;
       const drawY = p.y + pointerYNorm * maxParallax * p.depth;
 
-      const edgeFade = Math.min(1, (band - p.y) / (band * 0.15) + 1, (p.y + 10) / (band * 0.15));
+      const edgeFade = Math.min(
+        1,
+        (band - p.y) / (band * 0.15) + 1,
+        (p.y + 10) / (band * 0.15),
+      );
       const alpha = p.baseAlpha * Math.max(0, Math.min(1, edgeFade));
 
       ctx.beginPath();
@@ -225,7 +158,7 @@
   if (canvas && ctx) {
     resizeCanvas();
     createParticles();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeCanvas();
       createParticles();
     });
@@ -236,7 +169,7 @@
     currentY += (targetY - currentY) * 0.06;
     dustX += (targetX - dustX) * 0.02;
     dustY += (targetY - dustY) * 0.02;
-    if (bgPhoto && !document.body.classList.contains('is-reading')) {
+    if (bgPhoto && !document.body.classList.contains("is-reading")) {
       bgPhoto.style.backgroundPosition = `${currentX}% ${currentY}%`;
     }
     drawParticles(time);
@@ -246,13 +179,16 @@
   requestAnimationFrame(tick);
 })();
 
+// ===== Hotspots (flower / book), page transition, and book reveal/close =====
 (() => {
-  const bgPhoto = document.getElementById('bgPhoto');
-  const flowerEl = document.getElementById('hotspotFlower');
-  const bookEl = document.getElementById('hotspotBook');
-  const book = document.querySelector('.book');
-  const closeBtn = document.getElementById('bookClose');
+  const bgPhoto = document.getElementById("bgPhoto");
+  const flowerEl = document.getElementById("hotspotFlower");
+  const bookEl = document.getElementById("hotspotBook");
+  const book = document.querySelector(".book");
+  const closeBtn = document.getElementById("bookClose");
   if (!bgPhoto || !flowerEl || !bookEl) return;
+
+  // -- position the flower/book hotspot buttons over the background photo --
 
   // bounding box of each object as a fraction of the rendered photo (x/y = center, w/h = size)
   const HOTSPOTS = {
@@ -271,9 +207,9 @@
   preload.onload = () => {
     mobileImg = { w: preload.naturalWidth, h: preload.naturalHeight };
   };
-  preload.src = './public/mobile-1.png';
+  preload.src = "./public/mobile-1.png";
 
-  const isMobileLayout = () => window.matchMedia('(width < 748px)').matches;
+  const isMobileLayout = () => window.matchMedia("(width < 748px)").matches;
 
   // mirrors the CSS background-size used for #bgPhoto at each breakpoint
   function getRenderedPhotoSize() {
@@ -296,13 +232,13 @@
     const cw = window.innerWidth;
     const ch = window.innerHeight;
 
-    const [posXRaw, posYRaw] = bgPhoto.style.backgroundPosition.split(' ');
+    const [posXRaw, posYRaw] = bgPhoto.style.backgroundPosition.split(" ");
     const posX = parseFloat(posXRaw);
     const posY = parseFloat(posYRaw);
     const offsetX = (cw - size.w) * ((Number.isNaN(posX) ? 50 : posX) / 100);
     const offsetY = (ch - size.h) * ((Number.isNaN(posY) ? 50 : posY) / 100);
 
-    const layout = isMobileLayout() ? 'mobile' : 'desktop';
+    const layout = isMobileLayout() ? "mobile" : "desktop";
 
     [
       [flowerEl, HOTSPOTS.flower[layout]],
@@ -315,7 +251,7 @@
     });
   }
 
-  window.addEventListener('resize', positionHotspots);
+  window.addEventListener("resize", positionHotspots);
 
   function loop() {
     positionHotspots();
@@ -323,15 +259,19 @@
   }
   requestAnimationFrame(loop);
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const pageTransition = document.getElementById('pageTransition');
+  // -- circle-wipe page transition, used when navigating to the flower page --
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const pageTransition = document.getElementById("pageTransition");
 
   // reset the overlay when the page is restored from bfcache (e.g. browser back button),
   // otherwise it stays stuck fully covering the screen since no script re-runs on restore
-  window.addEventListener('pageshow', () => {
+  window.addEventListener("pageshow", () => {
     if (!pageTransition) return;
-    pageTransition.classList.remove('is-active');
-    pageTransition.style.pointerEvents = 'none';
+    pageTransition.classList.remove("is-active");
+    pageTransition.style.pointerEvents = "none";
   });
 
   function navigateWithTransition(url, originEl) {
@@ -350,96 +290,136 @@
     const radiusNeeded = Math.hypot(farX, farY);
     const scale = (radiusNeeded * 2) / 40;
 
-    pageTransition.style.setProperty('--tx', `${originX}px`);
-    pageTransition.style.setProperty('--ty', `${originY}px`);
-    pageTransition.style.setProperty('--scale', String(scale));
-    pageTransition.style.pointerEvents = 'auto';
+    pageTransition.style.setProperty("--tx", `${originX}px`);
+    pageTransition.style.setProperty("--ty", `${originY}px`);
+    pageTransition.style.setProperty("--scale", String(scale));
+    pageTransition.style.pointerEvents = "auto";
 
     requestAnimationFrame(() => {
-      pageTransition.classList.add('is-active');
+      pageTransition.classList.add("is-active");
     });
 
-    window.setTimeout(() => {
-      window.location.href = url;
-    }, reduceMotion ? 0 : 2000);
+    window.setTimeout(
+      () => {
+        window.location.href = url;
+      },
+      reduceMotion ? 0 : 2000,
+    );
   }
+
+  // -- click feedback: bloom particle + background pulse --
 
   let pulseTimer = null;
   function pulseBackground() {
     if (reduceMotion) return;
-    bgPhoto.classList.add('bg-pulse');
+    bgPhoto.classList.add("bg-pulse");
     clearTimeout(pulseTimer);
-    pulseTimer = setTimeout(() => bgPhoto.classList.remove('bg-pulse'), 650);
+    pulseTimer = setTimeout(() => bgPhoto.classList.remove("bg-pulse"), 650);
   }
 
   function spawnFx(el, variant) {
     if (reduceMotion) return;
     const rect = el.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 1.4;
-    const fx = document.createElement('div');
+    const fx = document.createElement("div");
     fx.className = `hotspot-fx hotspot-fx--${variant}`;
     fx.style.left = `${rect.left + rect.width / 2}px`;
     fx.style.top = `${rect.top + rect.height / 2}px`;
     fx.style.width = `${size}px`;
     fx.style.height = `${size}px`;
-    fx.addEventListener('animationend', () => fx.remove());
+    fx.addEventListener("animationend", () => fx.remove());
     document.body.appendChild(fx);
   }
 
   function handleFlowerClick() {
-    spawnFx(flowerEl, 'flower');
+    spawnFx(flowerEl, "flower");
     pulseBackground();
-    document.dispatchEvent(new CustomEvent('hotspot:flower'));
-    navigateWithTransition('./Flower-animation/index.html', flowerEl);
+    document.dispatchEvent(new CustomEvent("hotspot:flower"));
+    navigateWithTransition("./Flower-animation/index.html", flowerEl);
   }
+
+  // -- book hotspot: bg zoom/rotate, then reveal the book; close button/Escape reverses it --
 
   function pulseZoom() {
     if (reduceMotion) return;
-    bgPhoto.classList.add('is-zoomed');
+    bgPhoto.classList.add("is-zoomed");
+  }
+
+  // -- "someone opened the book" email notification, sent once per visit --
+  // Fill these in after setting up a free account at https://www.emailjs.com/
+  const EMAILJS_PUBLIC_KEY = "lu7fhAvBUeknWgujp";
+  const EMAILJS_SERVICE_ID = "jlEA5F0YsgfG2kgKZ3d5i";
+  const EMAILJS_TEMPLATE_ID = "template_a4c7dkf";
+
+  if (
+    typeof emailjs !== "undefined" &&
+    EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY"
+  ) {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
+  let notified = false;
+  function notifyBookOpened() {
+    if (notified) return;
+    notified = true;
+
+    if (
+      typeof emailjs === "undefined" ||
+      EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY"
+    )
+      return;
+
+    emailjs
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        time: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+        page: window.location.href,
+      })
+      .catch(() => {});
   }
 
   let bookRevealed = false;
   function revealBook() {
     if (bookRevealed || !book) return;
     bookRevealed = true;
-    book.classList.add('is-visible');
-    document.body.classList.add('is-reading');
+    book.classList.add("is-visible");
+    document.body.classList.add("is-reading");
+    notifyBookOpened();
   }
 
   function closeBook() {
     if (!bookRevealed) return;
     bookRevealed = false;
-    if (book) book.classList.remove('is-visible');
-    document.body.classList.remove('is-reading');
-    bgPhoto.classList.remove('is-zoomed');
+    if (book) book.classList.remove("is-visible");
+    document.body.classList.remove("is-reading");
+    bgPhoto.classList.remove("is-zoomed");
   }
 
   if (closeBtn) {
-    closeBtn.addEventListener('click', closeBook);
+    closeBtn.addEventListener("click", closeBook);
   }
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeBook();
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeBook();
   });
 
   function handleBookClick() {
-    spawnFx(bookEl, 'book');
+    spawnFx(bookEl, "book");
     pulseBackground();
 
     if (reduceMotion) {
       revealBook();
     } else {
       pulseZoom();
-      bgPhoto.addEventListener('transitionend', function onZoomEnd(event) {
-        if (event.propertyName !== 'transform') return;
-        bgPhoto.removeEventListener('transitionend', onZoomEnd);
+      bgPhoto.addEventListener("transitionend", function onZoomEnd(event) {
+        if (event.propertyName !== "transform") return;
+        bgPhoto.removeEventListener("transitionend", onZoomEnd);
         revealBook();
       });
     }
 
-    document.dispatchEvent(new CustomEvent('hotspot:book'));
+    document.dispatchEvent(new CustomEvent("hotspot:book"));
   }
 
-  flowerEl.addEventListener('click', handleFlowerClick);
-  bookEl.addEventListener('click', handleBookClick);
+  flowerEl.addEventListener("click", handleFlowerClick);
+  bookEl.addEventListener("click", handleBookClick);
 })();
