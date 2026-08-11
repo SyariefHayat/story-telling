@@ -22,11 +22,15 @@ window.addEventListener("load", () => {
         ["#75c9ff", "#e8fbff"],
         ["#ff6f83", "#ffe4a7"]
     ];
+    // Background grass/greenery (.long-g, .flower__g-right, .flower__g-fr,
+    // etc.) is deliberately left out here: those leaves are drawn with a CSS
+    // mask, so their real bounding box is a much bigger rectangle than the
+    // visible leaf shape. Including them meant most raindrops were "caught"
+    // by invisible/masked-away corners before ever reaching the ground, so
+    // far fewer drops than expected made it down to actually grow a flower.
     const collisionSelector = [
         ".flower__leaf", ".flower__white-circle", ".flower__line",
-        ".flower__line__leaf", ".tulip__petal", ".flower__grass",
-        ".flower__grass__leaf", ".flower__g-long", ".flower__g-right",
-        ".flower__g-front", ".flower__g-fr", ".long-g", ".leaf",
+        ".flower__line__leaf", ".tulip__petal",
         ".rain-big-bloom__head", ".rain-big-bloom__root"
     ].join(",");
     let targets = [];
@@ -119,7 +123,7 @@ window.addEventListener("load", () => {
     function growFlower(x) {
         const element = document.createElement("i");
         const [color, center] = flowerPalette[Math.floor(Math.random() * flowerPalette.length)];
-        const variants = ["daisy", "star"];
+        const variants = ["daisy", "star", "tulip"];
         const variant = variants[Math.floor(Math.random() * variants.length)];
         const size = 1.25 + Math.random() * 0.55;
         // On phones the small blooms read as too tiny at the same vmin sizing
