@@ -7,268 +7,503 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="bgPhoto" aria-hidden="true"></div>
+    <div id="bgVignette" aria-hidden="true"></div>
+    <div id="bgSpotlight" aria-hidden="true"></div>
     <canvas id="dust" aria-hidden="true"></canvas>
+    <button type="button" class="hotspot" id="hotspotFlower" data-hotspot="flower" aria-label="Bunga"></button>
+    <button type="button" class="hotspot" id="hotspotBook" data-hotspot="book" aria-label="Buku"></button>
+    <button type="button" id="bookClose" class="book-close" aria-label="Tutup buku">✕</button>
+    <div id="pageTransition" aria-hidden="true"></div>
+    <!-- book-cover click-to-open animation disabled for now
+    <div id="bookCover" role="button" tabindex="0" aria-label="Buka buku">
+        <div class="book-cover__sprite"></div>
+        <p class="book-cover__hint">klik untuk membuka</p>
+    </div>
+    -->
     <div class="container">
         <div class="sprite-wrapper">
             <div class="book">
             <!--  Carousel container -->
-            <div class="carousel" style="--slides: 9;">
-                <!--  Bg sprite -->
-                <div class="sprite"></div>
-                <!--  Carousel items -->
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                🧩 Chapter 0
-                                </p>
-                                <p>🌸 Bunga Mawaddah</p>
-                                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                <div class="carousel" style="--slides: 17;">
+                    <!--  Bg sprite -->
+                    <div class="sprite"></div>
+                    <!--  Carousel items -->
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Bab 1
+                                    </p>
+                                    <br>
+                                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
+                                    <p style="margin: 0; font-style: italic;">
+                                    "Ada pertemuan yang datang tanpa direncanakan, tanpa dicari, bahkan tanpa disadari — namun justru itulah yang perlahan menuliskan kisahnya sendiri, hingga sampai pada akhir yang paling indah."
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                🌟 Profil Singkat
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                Bunga Mawaddah adalah seorang mahasiswi semester 3 di jurusan pendidikan, namun entah mengapa dia sudah pernah membuat sebuah skripsi dan sedang menyelesaikan pembuatan tesis.
-                                </p><br>
-                                <p style="margin: 0; text-indent: 1rem">🎨 Hobby</p>
-                                <ul style="padding: 0; list-style: auto; list-style-position: inside; margin: 0">
-                                    <li>
-                                        📖 Membaca Buku  
-                                        <div style="padding-left: 1rem;">
-                                            aq sebenar e sudah menduga nek amu iq pecinta buku (berdasarkan insting) 🤣, tapi ya... sing membuat q kaget iq ketika kamu bilang kamu ngaak pernah membaca novel karya e TERE LIYE.
-                                        </div>
-                                    </li>
-                                    <li>
-                                        🌀 Menonton Anime
-                                        <div style="padding-left: 1rem;">
-                                            Jujurly aq kaget ketika amu bilang suka hobby sing satu iki soale aq melihat amu iq orang sing sibuk banget 
-                                        </div>
-                                    </li>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Chapter 0
+                                    </p>
+                                    <p>🌸 Bunga Mawadah</p>
+                                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    🌟 Profil Singkat
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Bunga Mawadah lahir di kota Lamongan pada tanggal 19 Juli 2006. Ia adalah seorang perempuan yang memiliki kepribadian yang unik dan menarik. Dengan sifatnya yang ambisius, pekerja keras, luwes, dan pemberani, ia mampu menghadapi berbagai tantangan dalam hidupnya dengan penuh semangat.
+                                    </p><br>
+                                    <p style="margin: 0; text-indent: 1rem">🎨 Hobby</p>
+                                    <ul style="padding: 0; list-style: auto; list-style-position: inside; margin: 0">
+                                        <li>
+                                            📖 Membaca Buku  
+                                            <div style="padding-left: 1rem;">
+                                                aq sebenar e sudah menduga nek amu iq pecinta buku (berdasarkan insting) 🤣, tapi ya... sing membuat q kaget iq ketika kamu bilang kamu ngaak pernah membaca novel karya e TERE LIYE.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            🌀 Menonton Anime
+                                            <div style="padding-left: 1rem;">
+                                                Jujurly aq kaget ketika amu bilang suka
+                                            </div>
+                                        </li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="padding-left: 1rem;">hobby sing satu iki soale aq melihat amu iq orang sing sibuk banget  dan aq berpikiran mana mungkin orang sesibuk amu punya hobi yang menghabiskan kesabaran dan banyak waktu iki.</p>
+                                    <ol start="3" style="padding: 0; list-style-position: inside; margin: 0">
+                                        <li>
+                                            🎮 Main Game
+                                            <div style="padding-left: 1rem;">
+                                                untungnya kne suka di game yang sama jadi aq bisa main bareng, meskipun aq sempet pensi hehe.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            🐱 Memelihara Binatang 
+                                            <div style="padding-left: 1rem;">
+                                                amu sediri sing cerita nek kapan suka memelihara hewan "LUCU" meskipun selera lucu mu itu masih terlalu abstrak nek menurut q.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            🍀 Berkebun
+                                            <div style="padding-left: 1rem;">
+                                                aq merasa amu pernah menceritakan kelakuan random mu tentang iki tapi ya... aq lali hmm....
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <ol start="6" style="padding: 0; list-style-position: inside; margin: 0">
+                                        <li>
+                                            📙 Membaca Komik 
+                                            <div style="padding-left: 1rem;">
+                                                aq tidak menduga nek amu pernah membaca komik "SOLO LEVELLING" dan sorry pernah mengejek anime favoritmu iki, tapi fakta ne emang gitu "dagu lancip".
+                                            </div>
+                                        </li>
+                                        <li>
+                                            ✍️ Menulis
+                                            <div style="padding-left: 1rem;">
+                                                amu pernah bercerita tentang hobby iki pada suatu malam, mboh amu jek ingat t gak.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            🔪 Memasak
+                                            <div style="padding-left: 1rem;">
+                                                aq baru tau nek kapan amu suka memasak. BTW Makasih Info nya hehe.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <p style="margin: 0;">
+                                    Mungkin segini yah info sing tak dapat dari cerita-cerita mu nek ada yang kurang atau mau ngasih cerita lagi sok cerita.
+                                    </p><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Chapter 1
+                                    </p>
+                                    <p>🤝 Pertemuan</p>
+                                    <img src="https://assets.codepen.io/36869/pixel-cat.jpg" width="100%" alt="">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    ✨ Januari 2025
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Bulan di mana kita bertemu, waktu iq panji bilang nek kapan ada kancane mau buat kursus an gwe kne mengamalkan ilmu ketika lulus dari kuliah dan waktu iq aq berpikiran nek kapan amu iki mahasiswa uq semester 7 soale panji pernah cerita nak aq nek kapan dee punya temen semester 7 ndek uq. Pikiran q waktu kok onk anomali ya... sang proso arek uq iw gak ada seh sing bakal punya pikiran kek unu dari situ aq tertarik untuk mencari tahu siapa anomali iki, lah ternyata aq salah paham soale panji gak menjelaskan background mu sama sekali dan ya ketika bertemu aq iq mencoba mengingat dan mencari cari mahasiswa semester 7 sing pernah tak temui
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    sang proso aq gak pernah ketemu mahasiswa semester 7 IF wajah e koyok amu dari situ aq mek bisa berpikiran positif mungkin amu iki mahasiswa kupu kupu. Seperti biasa sing tak lakuka ketika pertama kali masuk ke lingkungan baru adalah mengamati dan dari hasil pengamatan q aq bisa menyimpulkan nek amu iki orang sing jago komunikasi nyapo aq bisa menyimpulkan seperti itu karena dari bahasa, cara bicara, dan ekspresi iq pas banget meskipun pas di awal awal pembicaraan aq melihat ekspresi ketidak pedean dan cara bicaramu sing kurang pd mungkin ya karena pada waktu iq amu skeptis nyawang aq sing gondrong hhhh.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    ✨ Februari 2025
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Project pertama, Mungkin ya... iq pertama kali ne amu nge chat aq setelah kne mari ketemu di bulan januari, karena hasil dari analisa q di awal iq amu orang sing jago komunikasi aq berusaha agar tidak banyak terlibat dengan amu karena aq tahu bahaya ne ber bicara dengan orang yang jago komunikasi yaitu mereka bisa mengendalikan pembicaraan sesuai keinginan mereka dan skenario terburuknya adalah mereka bisa mengendalikan pikiran lewat manupulasi kata-kata, tapi untung nya amu juga gak punya niatan mengendalikan pikiran q karena amu nge chat aq hanya untuk membahas pekerjaan (crita iki gak 100% real, karena aq juga sodok lali hehe).
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    ✨ Mei 10 2025
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    project kedua, di project kedua iki aq mengusulkan bagaimana nek di project kedua iki kita buat dengan coding manual kenapa aq mengusulkannya karena aq wes muak utak atik plugin wordpress sing akhire kita di suruh bayar, karena pembahasan iki terjadi lewat chat aq dadi gak bisa menebak apa sing amu pikirkan waktu iq, tapi akhire amu setuju dengan usulan q, dalam proses pengerjaan iki aq tanyak ndek amu mungkin gak nek kapan kita nambah tim buat web karena pada waktu iq aq kesulitan dalam membuat design web e tapi pada waktu iq amu bilang "Nek kapan kita mau nambah tim, iq kudu golek sing jek dalam fase belajar soale aq belum bisa bayar" dan aq langsung paham kegelisahan mu pada waktu iq,
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0;">
+                                    dan ndek sini aq mau minta maaf ya karena masalah tim iki pernah tak singgung ndek beberapa kali pertemuan dan yaa aq bisa liat ekspresimu ada sedikit rasa kasihan nak aq (iyh gak seh sorry nek sotoy 🤣) iq sebenar e aq mau ngomong nak my self nyapo kok wes beberapa bulan iki aq jek belum bisa design hmmm....
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    ✨ Juni 25 2025
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Project ke tiga, aq bingung ape nulis apa ndek bagian ini intine iki adalah project sing menegangkan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Chapter 2
+                                    </p>
+                                    <p>🌸 Yatallatop</p>
+                                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                        ✨ Cermin yang tak pernah memantul
+                                    </p>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                        Ia hidup dalam labirin logika yang ia bangun sendiri—rapi, penuh retorika, tapi kosong dari makna sejati. Lidahnya lihai, menggiring percakapan seperti pemain sulap menggiring mata penonton. Ia tak pernah mau mengalah, apalagi mengakui kesalahan. Fakta dianggap serangan, bukan kebenaran. Baginya, perdebatan bukan soal mencari titik temu, tapi tentang bagaimana tetap tampak benar meskipun sudah jelas keliru. Ia bukan musuh yang beringas, hanya bayangan ego yang terlalu keras kepala untuk berdamai dengan kenyataan. Sedikit pengantar kata untuk orang yang sedang amu hadapi.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                        ✨ Puzzle yang terpecahkan
+                                    </p>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                        Meskipun amu males banget ketika menghadapi penyihir ini karena beberapa faktor seperti dia yang membawa bawa keluarga dalam pekerjaan mu, dia yang tidak pernah tau kapan waktu untuk bekerja dan kapan waktu untuk istirahat. Tapi berkat penyihir ini aq berhasil melengkapi puzzle tentang character mu, karena itu aq bisa meyimpulkan nek amu adalah perempuan yang sangat ambisius, pekerja keras, luwes, dan pemberani. Mungkin amu tidak sadar akan hal ini tapi aq bisa melihatnya dari cara mu bekerja, cara mu berbicara, dan cara mu berinteraksi dengan orang lain (terjadi pada moment pelatihan). 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                        ✨ Secercah Harapan
+                                    </p>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                        Aq mulai aktif bersosial iq pas ndek UQ ya karena ancen tujuan q masuk UQ iw untuk mencari relasi, dan dalam proses nya aq iw ndak menemukan "WOMEN" sing tak temui iq kebanyakan "GIRL" nyapo aq bisa menyimpulkan seperti itu karena kebanyakan dari mereka hanya memikirkan hanya ingin hidup enak tanpa mau berusaha dan beberapa faktor lain, dan ya... aq sudah muak dengan hal itu, tapi ketika aq berhasil memecahkan puzzle character mu aq merasa ada secercah harapan untuk membuktikan bahwa masih ada "WOMEN" meskipun itu dengan rasio yang relatif kecil.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                        ✨ Perubahan
+                                    </p>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                        Ntah amu sadar atau tidak, tapi sejak aq berhasil memecahkan puzzle character mu sifat q mulai berubah, nek di tanya nyapo ya karena aq ngak mau melewatkan hidden gem sing tak temukan meskipun amu iw random banget hhh, tapi untungnya amu merespon baik perubahan q BTW makasih ya 😊, karena amu adalah perempuan pertama sing banyak tak jak bicara dadi maaf ya nek ada beberapa kata kata atau apa sing menyinggung mu nek ada mending langsung bilang ok, dan ya... aq merasa nyaman ketika berinteraksi dengan amu.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <img src="https://assets.codepen.io/36869/brilliant.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Bab 2
+                                    </p>
+                                    <br />
+                                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
+                                    <p style="margin: 0; font-style: italic;">
+                                    "What if it's right?"
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    🧩 Chapter 3
+                                    </p>
+                                    <p>🌸 Turning Point</p>
+                                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Akhir-akhir ini amu cuek banget yaa... Aku tahu kalau amu lagi sibuk banget, tapi aku merasa ada yang berubah dari mu. Mungkin ya... karena aku terlalu sering mengganggu mu dengan pertanyaan-pertanyaan yang sebenarnya nggak penting.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Tapi, aku melakukan itu karena didasari oleh dua hal. Yang pertama, aku memang sekadar ingin berinteraksi dengan mu. Dan yang kedua, kalau amu tanya, “Lahh kenapa pertanyaan-pertanyaan ku sampai bersifat pribadi, seperti aktivitas atau kegiatan mu sehari-hari dan lain-lain?” Itu karena aku menempatkan posisi ku sebagai saudara mu.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Jadi, bukan karena aku ingin ikut campur atau terlalu kepo dengan kehidupan mu,
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    tapi karena aku menganggap mu sebagai saudara. Makanya, secara nggak langsung aku merasa wajar untuk sekadar bertanya dan tahu tentang kegiatan mu.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Haa, saudara? Yess... Mungkin amu lupa, tapi amu sendiri yang pernah meminta ku untuk menempatkan posisi ku sebagai saudara mu.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Itu terjadi ketika amu berhasil masuk USG. Suatu malam, amu bilang begini, “Adek e smn nambah maneh, Mas” Mungkin waktu itu amu melihat ku hanya diam dan nggak menunjukkan ekspresi apa-apa. Tapi sebenarnya, saat itu aku sedang berpikir dan merenungkan apa yang amu katakan.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Waktu itu aku berpikir, “Lahh, kenapa amu bilang begitu? Apa maksud mu dengan kata-kata itu?”
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Dan akhirnya, aku menyimpulkan bahwa mungkin amu sebenarnya hanya ingin diperhatikan.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Pertama kali aku merasa kalau pemikiran itu mungkin salah adalah ketika amu keluar dan baru pulang sekitar jam 10 malam. Waktu itu aku sempat mengirim chat ke amu dan menanyakan, “Kok belum pulang?” 
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Mungkin karena pemilihan kata-kataku yang kurang tepat, akhirnya amu menjawabnya dengan singkat banget. Padahal aq hanya ingin bertanya "amu pulang jam berapa? trus nanti di anter sapa?".
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Aku juga ingin menyakan tentang cerita mu yang mengatakan bahwa ortu mu itu ketat banget tentang hal hal seperti itu.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Dengan kondisi ini selamat amu membuat pikiran ku kacau balau mulai dari "kenapa amu tidak menanggapi ke khawatiran q? apakah itu tidak penting? dengan posisi yang amu minta sendiri kepada ku apakah itu belum cukup?".
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Kemudian bagaimana dengan cerita-ceritamu yang mengatakan bahwa aba mu akan mempermasalahkannya jika amu keluar dan pulang larut malam "apakah itu semua hanya untuk menakut-nakuti q? apakah benar jika amu membohongi q?" just tell me why...
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Dengan semua kondisi tadi membuat perasaan ku campur aduk sedih, kecewa, bingung, dan karena itu aku gagal menyikapi beberapa hal dengan baik. 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Mungkin amu juga bertanya-tanya, kenapa aku bisa sesensitif itu dengan masalah ketika amu boncengan dengan orang lain. Itu karena ketika amu melakukannya, aku merasa amu sedang mengingkari kata-kata mu sendiri. Bukan semata-mata karena masalah boncengan itu, tapi karena aku masih mengingat apa yang pernah amu katakan sebelumnya.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Amu bilang begini "Aq boncengan dgn arek lanang mampus aq ambek aba q" bahkan amu juga sampai nakut-nakuti ku dengan bilang bahwa "mbak u di nikahkan juga karena boncengan dengan laki-laki".
+                                    </p>
+                                    <p style="margin: 0px; text-indent: 1rem">
+                                    Dan pada satu moment amu pernah nolak ketika tak gonceng, Dan itu membuat aku merasa kalau amu adalah orang yang sangat setia dengan kata-kata mu sendiri.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Makanya, ketika aku melihat atau tahu kalau amu boncengan dengan orang lain, aku merasa sedih.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Itu sudah cukup untuk membuat pikiran ku menjadi kacau, "kenapa amu melakukan itu?, Kenapa amu bisa dengan mudah mengingkari kata-kata mu sendiri?, apakah amu juga mengatakan hal yang sama ke mereka?, apakah amu lupa?, jika iya kenapa amu ngaak pernah menanyakan diam q?, apakah amu sengaja membiarkan ini terjadi?, apakah benar jika amu membohongi q?, apakah amu ingin aq pergi?"
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Just tell me why...? Bahkan amu baru baru ini melakukannya lagi bahkan pada malam hari.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Sebenarnya kalau amu ngaak pernah bilang seperti itu aku ngaak akan mempermasalahkannya tohh aq juga sering melihat yang seperti itu.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Ketahuilah dari semua cerita di atas aq hanya ingin mecari tahu bagaimana amu melihat q apakah sebagai rekan kerja? teman? atau saudara?.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Rekan kerja artinya tidak ada pembahasan yang bersifat personal atau pribadi semua hal yang terjadi hanya atas dasar bisnis.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Amu pernah bilang kalau pernah mengenalkan ku ke teman-teman mu sebagai rekan kerja, itu sudah cukup untuk membuat q terdiam, mungkin usaha q saja yang kurang. 
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Dan akhirnya aq mengetahui jawaban dari pertanyaan yang selama ini aq cari, kemarin amu membuat sebuah note iq yang berisi "just a friend" dan aq langsung merasa kalau note itu untuk ku, maka untuk memastikan aq membuat sebuah note ig juga dengan pesan "friend :)" hanya untuk memastikan apakah benar itu untuk ku?.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Karena tidak ada tanggapan akhirnya aq menyimpulkan bahwa itu untuk ku maka aq membuat note baru dengan pesan "sayonara" untuk posisi yang amu berikan kepada ku.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Akhirnya aq menemukan jawaban di balik semua perlakuanmu, kenapa amu cuek banget selama ini berbeda dengan dulu ketika amu dan aq mulai saling mengenal satu sama lain.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Kalau amu berpendapat bahwa diam q baru baru ini karena amu yang tidak merespon chat q itu kurang tepat, karena aq tahu betul seberapa sibuk nya amu.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Itu karena ketika aq chat amu dan posisi mu sedang online (dengan trik kecil) amu tidak merespon sedikitpun yang membuat aq bertanya-tanya "apakah amu sudah bosan dengan ku?".
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Itu yang membuat interest dan excited ku terhadap mu mulai menghilang sedikit demi sedikit, padahal Aq lebih suka amu terus terang misal males wa an ya bilang ae jek males wa an. tentang menghargai orang lain
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Entah sebuah kebetulan atau cobaan di masa masa itu ada seseorang dari kelas ku yang confess kepada ku, di momen itu aku bingung mau jawab aku ingin sekali meminta pendapatmu, kenapa? karena kalau aq jawab untuk sekarang tidak dulu, maka itu artinya aq memberi dia kesempatan mungkin di kemudian hari yang penting tidak sekarang.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Sedangkan di satu sisi aku sudah menentukan siapa yang sedang ku perjuangkan, karena aku tidak mau menjadikanmu sebuah opsi, dan aku juga tidak mau mengingkari kata-kata ku kepadamu, maka aku kebingungan untuk menolaknya. Dan pada akhirnya aq hanya bilang terima kasih.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Dari semua cerita tadi itu bukan berarti aku membenci mu, 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    toh itu semua terjadi karena aku yang lemah. hmm..., jadi kalau amu bosen dengan ku, proses ku yang terlalu lama, aku yang ngaak menarik lagi buat mu, dll just tell me, why ? biar aq bisa melepas mu dan melanjutkan pencarian ku.
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Aku juga berterima kasih kepada mu telah mengkritik ku di beberapa story dan note ig mu jujur aku senang akhirnya kamu mengkritik ku meskipun aku kurang suka dengan cara mu yang bermain sindir sindir lewat sosmed padahal aku welcome dan lebih suka kalau amu bilang langsung ke aku
+                                    </p>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    Kemarin aku sempat bilang ke mbak umi kalau aku sudah ngaak ada rasa lagi ke amu, aku pikir aku salah karena bilang itu i'm sorry..., karena yang sebenarnya terjadi adalah aq sudah tidak excited lagi ke amu,
+                                    </p>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="page-container">
+                            <div class="page left-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem">
+                                    jadi untuk mengisinya dan membakar spirit ku lagi aku ingin memberitahumu beberapa kata yang paling menggambarkan situasi ku saat ini yaitu i love you, i'm sorry 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page right-page">
+                                <div>
+                                    <p style="margin: 0; text-indent: 1rem"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="padding-left: 1rem;">dan aq berpikiran mana mungkin orang sesibuk amu punya hobi yang menghabiskan kesabaran dan banyak waktu iki.</p>
-                                <ol start="3" style="padding: 0; list-style-position: inside; margin: 0">
-                                    <li>
-                                        🎮 Main Game
-                                        <div style="padding-left: 1rem;">
-                                            untungnya kne suka di game yang sama jadi aq bisa main bareng, meskipun aq sempet pensi hehe.
-                                        </div>
-                                    </li>
-                                    <li>
-                                        🐱 Memelihara Binatang 
-                                        <div style="padding-left: 1rem;">
-                                            amu sediri sing cerita nek kapan suka memelihara hewan "LUCU" meskipun selera lucu mu itu masih terlalu abstrak nek menurut q.
-                                        </div>
-                                    </li>
-                                    <li>
-                                        🍀 Berkebun
-                                        <div style="padding-left: 1rem;">
-                                            aq merasa amu pernah menceritakan kelakuan random mu tentang iki tapi ya... aq lali hmm....
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <ol start="6" style="padding: 0; list-style-position: inside; margin: 0">
-                                    <li>
-                                        📙 Membaca Komik 
-                                        <div style="padding-left: 1rem;">
-                                            aq tidak menduga nek amu pernah membaca komik "SOLO LEVELLING" dan sorry pernah mengejek anime favoritmu iki, tapi fakta ne emang gitu "dagu lancip".
-                                        </div>
-                                    </li>
-                                    <li>
-                                        ✍️ Menulis
-                                        <div style="padding-left: 1rem;">
-                                            amu pernah bercerita tentang hobby iki pada suatu malam, mboh amu jek ingat t gak.
-                                        </div>
-                                    </li>
-                                    <li>
-                                        🔪 Memasak
-                                        <div style="padding-left: 1rem;">
-                                            aq baru tau nek kapan amu suka memasak. BTW Makasih Info nya hehe.
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                            <div>
-                                <p style="margin: 0;">
-                                Mungkin segini yah info sing tak dapat dari cerita-cerita mu nek ada yang kurang atau mau ngasih cerita lagi sok cerita.
-                                </p><br>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                🧩 Chapter 1
-                                </p>
-                                <p>🤝 Pertemuan</p>
-                                <img src="https://assets.codepen.io/36869/pixel-cat.jpg" width="100%" alt="">
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                ✨ Januari 2025
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                Bulan di mana kita bertemu, waktu iq panji bilang nek kapan ada kancane mau buat kursus an gwe kne mengamalkan ilmu ketika lulus dari kuliah dan waktu iq aq berpikiran nek kapan amu iki mahasiswa uq semester 7 soale panji pernah cerita nak aq nek kapan dee punya temen semester 7 ndek uq. Pikiran q waktu kok onk anomali ya... sang proso arek uq iw gak ada seh sing bakal punya pikiran kek unu dari situ aq tertarik untuk mencari tahu siapa anomali iki, lah ternyata aq salah paham soale panji gak menjelaskan background mu sama sekali dan ya ketika bertemu aq iq mencoba mengingat dan mencari cari mahasiswa semester 7 sing pernah tak temui
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                sang proso aq gak pernah ketemu mahasiswa semester 7 IF wajah e koyok amu dari situ aq mek bisa berpikiran positif mungkin amu iki mahasiswa kupu kupu. Seperti biasa sing tak lakuka ketika pertama kali masuk ke lingkungan baru adalah mengamati dan dari hasil pengamatan q aq bisa menyimpulkan nek amu iki orang sing jago komunikasi nyapo aq bisa menyimpulkan seperti itu karena dari bahasa, cara bicara, dan ekspresi iq pas banget meskipun pas di awal awal pembicaraan aq melihat ekspresi ketidak pedean dan cara bicaramu sing kurang pd mungkin ya karena pada waktu iq amu skeptis nyawang aq sing gondrong hhhh.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                ✨ Februari 2025
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                Project pertama, Mungkin ya... iq pertama kali ne amu nge chat aq setelah kne mari ketemu di bulan januari, karena hasil dari analisa q di awal iq amu orang sing jago komunikasi aq berusaha agar tidak banyak terlibat dengan amu karena aq tahu bahaya ne ber bicara dengan orang yang jago komunikasi yaitu mereka bisa mengendalikan pembicaraan sesuai keinginan mereka dan skenario terburuknya adalah mereka bisa mengendalikan pikiran lewat manupulasi kata-kata, tapi untung nya amu juga gak punya niatan mengendalikan pikiran q karena amu nge chat aq hanya untuk membahas pekerjaan (crita iki gak 100% real, karena aq juga sodok lali hehe).
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                ✨ Mei 10 2025
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                project kedua, di project kedua iki aq mengusulkan bagaimana nek di project kedua iki kita buat dengan coding manual kenapa aq mengusulkannya karena aq wes muak utak atik plugin wordpress sing akhire kita di suruh bayar, karena pembahasan iki terjadi lewat chat aq dadi gak bisa menebak apa sing amu pikirkan waktu iq, tapi akhire amu setuju dengan usulan q, dalam proses pengerjaan iki aq tanyak ndek amu mungkin gak nek kapan kita nambah tim buat web karena pada waktu iq aq kesulitan dalam membuat design web e tapi pada waktu iq amu bilang "Nek kapan kita mau nambah tim, iq kudu golek sing jek dalam fase belajar soale aq belum bisa bayar" dan aq langsung paham kegelisahan mu pada waktu iq,
-                                </p>
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0;">
-                                dan ndek sini aq mau minta maaf ya karena masalah tim iki pernah tak singgung ndek beberapa kali pertemuan dan yaa aq bisa liat ekspresimu ada sedikit rasa kasihan nak aq (iyh gak seh sorry nek sotoy 🤣) iq sebenar e aq mau ngomong nak my self nyapo kok wes beberapa bulan iki aq jek belum bisa design hmmm....
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                ✨ Juni 25 2025
-                                </p>
-                                <p style="margin: 0; text-indent: 1rem">
-                                Project ke tiga, aq bingung ape nulis apa ndek bagian ini intine iki adalah project sing menegangkan.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                🧩 Chapter 2
-                                </p>
-                                <p>🌸 Yatallatop</p>
-                                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                    ✨ Cermin yang tak pernah memantul
-                                </p>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                    Ia hidup dalam labirin logika yang ia bangun sendiri—rapi, penuh retorika, tapi kosong dari makna sejati. Lidahnya lihai, menggiring percakapan seperti pemain sulap menggiring mata penonton. Ia tak pernah mau mengalah, apalagi mengakui kesalahan. Fakta dianggap serangan, bukan kebenaran. Baginya, perdebatan bukan soal mencari titik temu, tapi tentang bagaimana tetap tampak benar meskipun sudah jelas keliru. Ia bukan musuh yang beringas, hanya bayangan ego yang terlalu keras kepala untuk berdamai dengan kenyataan. Sedikit pengantar kata untuk orang yang sedang amu hadapi.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                    ✨ Puzzle yang terpecahkan
-                                </p>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                    Meskipun amu males banget ketika menghadapi penyihir ini karena beberapa faktor seperti dia yang membawa bawa keluarga dalam pekerjaan mu, dia yang tidak pernah tau kapan waktu untuk bekerja dan kapan waktu untuk istirahat. Tapi berkat penyihir ini aq berhasil melengkapi puzzle tentang character mu, karena itu aq bisa meyimpulkan nek amu adalah perempuan yang sangat ambisius, pekerja keras, luwes, dan pemberani. Mungkin amu tidak sadar akan hal ini tapi aq bisa melihatnya dari cara mu bekerja, cara mu berbicara, dan cara mu berinteraksi dengan orang lain (terjadi pada moment pelatihan). 
-                                </p>
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                    ✨ Secercah Harapan
-                                </p>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                    Aq mulai aktif bersosial iq pas ndek UQ ya karena ancen tujuan q masuk UQ iw untuk mencari relasi, dan dalam proses nya aq iw ndak menemukan "WOMEN" sing tak temui iq kebanyakan "GIRL" nyapo aq bisa menyimpulkan seperti itu karena kebanyakan dari mereka hanya memikirkan hanya ingin hidup enak tanpa mau berusaha dan beberapa faktor lain, dan ya... aq sudah muak dengan hal itu, tapi ketika aq berhasil memecahkan puzzle character mu aq merasa ada secercah harapan untuk membuktikan bahwa masih ada "WOMEN" meskipun itu dengan rasio yang relatif kecil.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0; text-indent: 1rem">
-                                    ✨ Perubahan
-                                </p>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                    Ntah amu sadar atau tidak, tapi sejak aq berhasil memecahkan puzzle character mu sifat q mulai berubah, nek di tanya nyapo ya karena aq ngak mau melewatkan hidden gem sing tak temukan meskipun amu iw random banget hhh, tapi untungnya amu merespon baik perubahan q BTW makasih ya 😊, karena amu adalah perempuan pertama sing banyak tak jak bicara dadi maaf ya nek ada beberapa kata kata atau apa sing menyinggung mu nek ada mending langsung bilang ok, dan ya... aq merasa nyaman ketika berinteraksi dengan amu.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div style="display: flex; justify-content: center; align-items: center;">
-                                <img src="https://assets.codepen.io/36869/brilliant.gif" alt="" style="width: 100%">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="page-container">
-                        <div class="page left-page">
-                            <div>
-                                <p style="margin: 0px; text-indent: 1rem">
-                                🧩 Chapter 4
-                                </p>
-                                <p>🌸 Penutup</p>
-                                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWtkNWdtMmpnYmoydDY2cDczOThndTF1YWNkZHJqcW1ydW9zcHFzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZsZwsU65E0qcok8/giphy.gif" alt="" style="width: 100%">
-                            </div>
-                        </div>
-                        <div class="page right-page">
-                            <div>
-                                <p>Sebelumnya aq mau mengucapkan selamat karena telah berhasil membaca tulisan unek-unek q iki 🥳, seharus ndek bagian iki aq ape ngucapno selamat dan doa untuk ultah mu tapi ywes lah ya event e wes kelewat oq huhuhu 😭.</p>
-
-                                <p>Mungkin amu bertanya tanya nyapo aq kok bisa kepikiran gwe project ngene ki, ya karena aq memiliki daya ingat sing sedikit kuat dan sing menyakitkan gwe orang sing kayak gini itu adalah lupa, mangkane dari pada nanti lupa dan menghilang lebih baik tak tulis, maka buatlah aku "Buku Kehidupan" meskipun isine mek apa sing tak lihat dan sing tak ingat tapi ywes lah ya 😊.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             </div>
         </div>
     </div>

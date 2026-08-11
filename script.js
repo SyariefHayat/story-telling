@@ -1,4 +1,84 @@
 (() => {
+  const cover = document.getElementById('bookCover');
+  const sprite = cover ? cover.querySelector('.book-cover__sprite') : null;
+  const book = document.querySelector('.book');
+  const bgPhoto = document.getElementById('bgPhoto');
+
+  if (!cover || !sprite || !book) return;
+
+  const COLS = 4;
+  const ROWS = 3;
+  const FRAMES = COLS * ROWS;
+  const FRAME_MS = 90;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  sprite.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+
+  const setFrame = (index) => {
+    const col = index % COLS;
+    const row = Math.floor(index / COLS);
+    sprite.style.backgroundPosition = `${(col * 100) / (COLS - 1)}% ${(row * 100) / (ROWS - 1)}%`;
+  };
+
+  const img = new Image();
+  img.onload = () => {
+    sprite.style.aspectRatio = String((img.naturalWidth / COLS) / (img.naturalHeight / ROWS));
+  };
+  img.src = './public/open-book.png';
+
+  setFrame(0);
+
+  let opened = false;
+
+  const bookAnimMs = reduceMotion ? 0 : (FRAMES - 1) * FRAME_MS;
+  const bgZoomMs = reduceMotion || !bgPhoto ? 0 : 650;
+  const bgZoomStart = bookAnimMs + 60;
+  const revealDelay = bgZoomStart + bgZoomMs;
+  const removeDelay = revealDelay + 650;
+
+  const openBook = () => {
+    if (opened) return;
+    opened = true;
+
+    cover.classList.add('is-opening');
+
+    if (reduceMotion) {
+      setFrame(FRAMES - 1);
+    } else {
+      let i = 0;
+      const timer = setInterval(() => {
+        i += 1;
+        setFrame(i);
+        if (i >= FRAMES - 1) clearInterval(timer);
+      }, FRAME_MS);
+    }
+
+    setTimeout(() => {
+      if (bgPhoto) bgPhoto.classList.add('is-zoomed');
+      cover.classList.add('is-settled');
+    }, bgZoomStart);
+
+    setTimeout(() => {
+      book.classList.add('is-visible');
+      cover.classList.add('is-hidden');
+    }, revealDelay);
+
+    setTimeout(() => {
+      cover.remove();
+    }, removeDelay);
+  };
+
+  cover.addEventListener('click', openBook);
+  cover.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openBook();
+    }
+  });
+})();
+
+(() => {
   window.addEventListener('load', () => {
     requestAnimationFrame(() => {
       document.body.classList.add('is-loaded');
@@ -75,6 +155,8 @@
       enableGyro();
     }
   }
+
+  const bgPhoto = document.getElementById('bgPhoto');
 
   // ----- floating dust particles -----
   const canvas = document.getElementById('dust');
@@ -154,10 +236,210 @@
     currentY += (targetY - currentY) * 0.06;
     dustX += (targetX - dustX) * 0.02;
     dustY += (targetY - dustY) * 0.02;
-    document.body.style.backgroundPosition = `${currentX}% ${currentY}%`;
+    if (bgPhoto && !document.body.classList.contains('is-reading')) {
+      bgPhoto.style.backgroundPosition = `${currentX}% ${currentY}%`;
+    }
     drawParticles(time);
     requestAnimationFrame(tick);
   }
 
   requestAnimationFrame(tick);
+})();
+
+(() => {
+  const bgPhoto = document.getElementById('bgPhoto');
+  const flowerEl = document.getElementById('hotspotFlower');
+  const bookEl = document.getElementById('hotspotBook');
+  const book = document.querySelector('.book');
+  const closeBtn = document.getElementById('bookClose');
+  if (!bgPhoto || !flowerEl || !bookEl) return;
+
+  // bounding box of each object as a fraction of the rendered photo (x/y = center, w/h = size)
+  const HOTSPOTS = {
+    flower: {
+      desktop: { x: 0.325, y: 0.45, w: 0.11, h: 0.38 },
+      mobile: { x: 0.285, y: 0.53, w: 0.23, h: 0.38 },
+    },
+    book: {
+      desktop: { x: 0.53, y: 0.4, w: 0.32, h: 0.53 },
+      mobile: { x: 0.58, y: 0.51, w: 0.46, h: 0.38 },
+    },
+  };
+
+  let mobileImg = { w: 0, h: 0 };
+  const preload = new Image();
+  preload.onload = () => {
+    mobileImg = { w: preload.naturalWidth, h: preload.naturalHeight };
+  };
+  preload.src = './public/mobile-1.png';
+
+  const isMobileLayout = () => window.matchMedia('(width < 748px)').matches;
+
+  // mirrors the CSS background-size used for #bgPhoto at each breakpoint
+  function getRenderedPhotoSize() {
+    const cw = window.innerWidth;
+    const ch = window.innerHeight;
+
+    if (isMobileLayout()) {
+      if (!mobileImg.w || !mobileImg.h) return null;
+      const scale = Math.max(cw / mobileImg.w, ch / mobileImg.h);
+      return { w: mobileImg.w * scale, h: mobileImg.h * scale };
+    }
+
+    return { w: cw * 1.1, h: ch * 1.1 };
+  }
+
+  function positionHotspots() {
+    const size = getRenderedPhotoSize();
+    if (!size) return;
+
+    const cw = window.innerWidth;
+    const ch = window.innerHeight;
+
+    const [posXRaw, posYRaw] = bgPhoto.style.backgroundPosition.split(' ');
+    const posX = parseFloat(posXRaw);
+    const posY = parseFloat(posYRaw);
+    const offsetX = (cw - size.w) * ((Number.isNaN(posX) ? 50 : posX) / 100);
+    const offsetY = (ch - size.h) * ((Number.isNaN(posY) ? 50 : posY) / 100);
+
+    const layout = isMobileLayout() ? 'mobile' : 'desktop';
+
+    [
+      [flowerEl, HOTSPOTS.flower[layout]],
+      [bookEl, HOTSPOTS.book[layout]],
+    ].forEach(([el, spot]) => {
+      el.style.left = `${offsetX + spot.x * size.w}px`;
+      el.style.top = `${offsetY + spot.y * size.h}px`;
+      el.style.width = `${spot.w * size.w}px`;
+      el.style.height = `${spot.h * size.h}px`;
+    });
+  }
+
+  window.addEventListener('resize', positionHotspots);
+
+  function loop() {
+    positionHotspots();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pageTransition = document.getElementById('pageTransition');
+
+  // reset the overlay when the page is restored from bfcache (e.g. browser back button),
+  // otherwise it stays stuck fully covering the screen since no script re-runs on restore
+  window.addEventListener('pageshow', () => {
+    if (!pageTransition) return;
+    pageTransition.classList.remove('is-active');
+    pageTransition.style.pointerEvents = 'none';
+  });
+
+  function navigateWithTransition(url, originEl) {
+    if (!pageTransition) {
+      window.location.href = url;
+      return;
+    }
+
+    const rect = originEl.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    // distance to the farthest viewport corner, so the circle fully covers the screen
+    const farX = Math.max(originX, window.innerWidth - originX);
+    const farY = Math.max(originY, window.innerHeight - originY);
+    const radiusNeeded = Math.hypot(farX, farY);
+    const scale = (radiusNeeded * 2) / 40;
+
+    pageTransition.style.setProperty('--tx', `${originX}px`);
+    pageTransition.style.setProperty('--ty', `${originY}px`);
+    pageTransition.style.setProperty('--scale', String(scale));
+    pageTransition.style.pointerEvents = 'auto';
+
+    requestAnimationFrame(() => {
+      pageTransition.classList.add('is-active');
+    });
+
+    window.setTimeout(() => {
+      window.location.href = url;
+    }, reduceMotion ? 0 : 2000);
+  }
+
+  let pulseTimer = null;
+  function pulseBackground() {
+    if (reduceMotion) return;
+    bgPhoto.classList.add('bg-pulse');
+    clearTimeout(pulseTimer);
+    pulseTimer = setTimeout(() => bgPhoto.classList.remove('bg-pulse'), 650);
+  }
+
+  function spawnFx(el, variant) {
+    if (reduceMotion) return;
+    const rect = el.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.4;
+    const fx = document.createElement('div');
+    fx.className = `hotspot-fx hotspot-fx--${variant}`;
+    fx.style.left = `${rect.left + rect.width / 2}px`;
+    fx.style.top = `${rect.top + rect.height / 2}px`;
+    fx.style.width = `${size}px`;
+    fx.style.height = `${size}px`;
+    fx.addEventListener('animationend', () => fx.remove());
+    document.body.appendChild(fx);
+  }
+
+  function handleFlowerClick() {
+    spawnFx(flowerEl, 'flower');
+    pulseBackground();
+    document.dispatchEvent(new CustomEvent('hotspot:flower'));
+    navigateWithTransition('./Flower-animation/index.html', flowerEl);
+  }
+
+  function pulseZoom() {
+    if (reduceMotion) return;
+    bgPhoto.classList.add('is-zoomed');
+  }
+
+  let bookRevealed = false;
+  function revealBook() {
+    if (bookRevealed || !book) return;
+    bookRevealed = true;
+    book.classList.add('is-visible');
+    document.body.classList.add('is-reading');
+  }
+
+  function closeBook() {
+    if (!bookRevealed) return;
+    bookRevealed = false;
+    if (book) book.classList.remove('is-visible');
+    document.body.classList.remove('is-reading');
+    bgPhoto.classList.remove('is-zoomed');
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeBook);
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeBook();
+  });
+
+  function handleBookClick() {
+    spawnFx(bookEl, 'book');
+    pulseBackground();
+
+    if (reduceMotion) {
+      revealBook();
+    } else {
+      pulseZoom();
+      bgPhoto.addEventListener('transitionend', function onZoomEnd(event) {
+        if (event.propertyName !== 'transform') return;
+        bgPhoto.removeEventListener('transitionend', onZoomEnd);
+        revealBook();
+      });
+    }
+
+    document.dispatchEvent(new CustomEvent('hotspot:book'));
+  }
+
+  flowerEl.addEventListener('click', handleFlowerClick);
+  bookEl.addEventListener('click', handleBookClick);
 })();

@@ -54,23 +54,75 @@
     box-sizing: border-box;
     padding: 1rem;
 
-    --bg-photo: url("./public/desktop.png");
+    --bg-photo: url("./public/desktop-1.png");
     --bg-photo-size: 110% 110%;
-
-    background-image:
-      linear-gradient(to right, rgba(6, 12, 32, 0.85) 0%, rgba(6, 12, 32, 0) 20%, rgba(6, 12, 32, 0) 80%, rgba(6, 12, 32, 0.85) 100%),
-      linear-gradient(to bottom, rgba(6, 12, 32, 0.8) 0%, rgba(6, 12, 32, 0) 28%),
-      var(--bg-photo);
-    background-repeat: no-repeat;
-    background-size: 100% 100%, 100% 100%, var(--bg-photo-size);
-    background-position: 50% 50%;
-
-    filter: blur(24px);
-    transition: background-position 0.2s ease-out, filter 0.8s ease-out;
   }
 
-  body.is-loaded {
+  #bgPhoto {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--bg-photo);
+    background-repeat: no-repeat;
+    background-size: var(--bg-photo-size);
+    background-position: 50% 50%;
+    transform-origin: 50% 50%;
+    filter: blur(24px);
+    transition:
+      background-position 0.2s ease-out,
+      filter 0.8s ease-out,
+      transform 0.65s ease-in-out;
+  }
+
+  body.is-loaded #bgPhoto {
     filter: blur(0);
+  }
+
+  #bgPhoto.is-zoomed {
+    transform: scale(1.8) rotate(30deg);
+  }
+
+  body.is-reading #bgPhoto {
+    filter: blur(6px) brightness(0.55) saturate(0.85);
+  }
+
+  #bgVignette {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(6, 12, 32, 0.85) 0%,
+        rgba(6, 12, 32, 0) 20%,
+        rgba(6, 12, 32, 0) 80%,
+        rgba(6, 12, 32, 0.85) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(6, 12, 32, 0.8) 0%,
+        rgba(6, 12, 32, 0) 28%
+      );
+  }
+
+  #bgSpotlight {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    background: radial-gradient(
+      circle at 50% 46%,
+      rgba(6, 12, 32, 0) 0%,
+      rgba(6, 12, 32, 0) 30%,
+      rgba(6, 12, 32, 0.7) 78%
+    );
+  }
+
+  body.is-reading #bgSpotlight {
+    opacity: 1;
   }
 
   .sprite-wrapper {
@@ -84,8 +136,140 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+  body.is-reading #dust {
+    opacity: 0;
+  }
+
+  .hotspot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 4px;
+    transition: opacity 0.5s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  body.is-reading .hotspot {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hotspot:hover,
+  .hotspot:focus-visible {
+    background: radial-gradient(ellipse at center, rgba(255, 246, 214, 0.22) 0%, rgba(255, 246, 214, 0) 70%);
+    box-shadow: 0 0 0 1px rgba(255, 246, 214, 0.35) inset;
+  }
+
+  .hotspot-fx {
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 1;
     pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0.9;
+    animation: hotspot-bloom 0.9s ease-out forwards;
+  }
+
+  .hotspot-fx--flower {
+    background: radial-gradient(
+      circle,
+      rgba(255, 246, 214, 0.85) 0%,
+      rgba(255, 246, 214, 0.35) 40%,
+      rgba(255, 246, 214, 0) 72%
+    );
+  }
+
+  .hotspot-fx--book {
+    background: radial-gradient(
+      circle,
+      rgba(241, 226, 178, 0.8) 0%,
+      rgba(47, 125, 120, 0.4) 45%,
+      rgba(47, 125, 120, 0) 75%
+    );
+  }
+
+  #bgPhoto.bg-pulse {
+    filter: brightness(1.12) saturate(1.1);
+    transform: scale(1.015);
+  }
+
+  .book-close {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 15;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(241, 226, 178, 0.4);
+    border-radius: 50%;
+    background: rgba(6, 12, 32, 0.55);
+    color: #f1e2b2;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease;
+  }
+
+  .book-close:hover,
+  .book-close:focus-visible {
+    background: rgba(6, 12, 32, 0.85);
+  }
+
+  body.is-reading .book-close {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  #pageTransition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border-radius: 50%;
+    background: #000;
+    pointer-events: none;
+    transform: translate3d(var(--tx, 50vw), var(--ty, 50vh), 0) scale(0);
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  #pageTransition.is-active {
+    transform: translate3d(var(--tx, 50vw), var(--ty, 50vh), 0) scale(var(--scale, 60));
+    transition: transform 2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+}
+
+@keyframes hotspot-bloom {
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
   }
 }
 
@@ -103,6 +287,8 @@
   }
 
   .container {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 3rem;
@@ -352,7 +538,7 @@
 
 @media (width < 748px) {
   body {
-    --bg-photo: url("./public/mobile.png");
+    --bg-photo: url("./public/mobile-1.png");
     --bg-photo-size: cover;
   }
 
@@ -441,5 +627,70 @@
   * {
     animation: none;
     transition: none;
+  }
+}
+
+.book.is-visible {
+  display: grid;
+}
+
+#bookCover {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  cursor: pointer;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s ease;
+}
+
+#bookCover.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.book-cover__sprite {
+  width: clamp(280px, 40vw, 480px);
+  background-repeat: no-repeat;
+  background-image: url("./public/open-book.png");
+  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.55));
+  transform: translateX(15%) rotate(-20deg);
+  transition: transform 1.1s cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+#bookCover.is-opening .book-cover__sprite {
+  transform: translateX(15%) rotate(-20deg);
+}
+
+#bookCover.is-settled .book-cover__sprite {
+  transform: translateX(15%) rotate(0deg);
+}
+
+.book-cover__hint {
+  margin: 0;
+  color: #f1e2b2;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  animation: book-cover-hint 1.8s ease-in-out infinite;
+}
+
+#bookCover.is-opening .book-cover__hint {
+  display: none;
+}
+
+@keyframes book-cover-hint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
   }
 }
