@@ -348,7 +348,7 @@
   // -- "someone opened the book" email notification, sent once per visit --
   // Fill these in after setting up a free account at https://www.emailjs.com/
   const EMAILJS_PUBLIC_KEY = "lu7fhAvBUeknWgujp";
-  const EMAILJS_SERVICE_ID = "jlEA5F0YsgfG2kgKZ3d5i";
+  const EMAILJS_SERVICE_ID = "service_u9ijdi4";
   const EMAILJS_TEMPLATE_ID = "template_a4c7dkf";
 
   if (
@@ -374,7 +374,8 @@
         time: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
         page: window.location.href,
       })
-      .catch(() => {});
+      .then((res) => console.log("EmailJS Success:", res.status, res.text))
+      .catch((err) => console.error("EmailJS Error details:", err));
   }
 
   let bookRevealed = false;
