@@ -49,6 +49,11 @@ window.addEventListener("load", () => {
     // active bloom keeps a glowing box-shadow on screen, which adds up on
     // mobile GPUs. Only roll it through half the time there.
     const growthChance = isMobile ? 0.5 : 1;
+    // Blooms also stick around far shorter on mobile (90s vs 10min) and cap
+    // out lower, so the on-screen count stays light instead of building up
+    // toward the full 240 over a long viewing session.
+    const bloomLifetime = isMobile ? 90000 : 600000;
+    const maxActiveBlooms = isMobile ? 80 : 240;
     const largeFlowerSlots = new Set();
     // Three "core" spots fill in reliably at the usual odds; a handful of
     // extra spots further out only sprout very rarely, so seeing a big
@@ -145,8 +150,8 @@ window.addEventListener("load", () => {
         element.innerHTML = '<i class="rain-bloom__stem"></i><i class="rain-bloom__head"></i>';
         garden.append(element);
         activeBlooms.push(element);
-        if (activeBlooms.length > 240) witherBloom(activeBlooms[0]);
-        window.setTimeout(() => witherBloom(element), 600000);
+        if (activeBlooms.length > maxActiveBlooms) witherBloom(activeBlooms[0]);
+        window.setTimeout(() => witherBloom(element), bloomLifetime);
     }
 
     function seedLargeFlower(x) {
